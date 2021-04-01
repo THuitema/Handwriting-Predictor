@@ -9,11 +9,11 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # hides tensorflow warnings
 
 
-image = cv.imread('images/IMG_1127.png')
-gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-blurred = cv.GaussianBlur(gray, (9, 9), 0)
-threshold, thresh = cv.threshold(blurred, 110, 255, cv.THRESH_BINARY) # pixels below 140 are turned 255 (white), above turned 0 (black)
-edges = cv.Canny(thresh, 30, 150) # min val, max val
+image = cv.imread('images/IMG_1127.png') # original image
+gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY) # convert to grayscale
+blurred = cv.GaussianBlur(gray, (9, 9), 0) # blur
+threshold, thresh = cv.threshold(blurred, 110, 255, cv.THRESH_BINARY) # pixels below 110 are turned 255 (white), otherwise turned 0 (black)
+edges = cv.Canny(thresh, 30, 150) # edge detection
 
 # cv.imshow('image', edges)
 
@@ -23,6 +23,7 @@ contours = sort_contours(contours, 'left-to-right')[0]
 
 chars = []
 chars_dimensions = []
+
 for c in contours:
     (x, y, w, h) = cv.boundingRect(c) # bounding box around contour
     # print(w, h)
