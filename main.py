@@ -71,11 +71,9 @@ predictions = model.predict([chars])
 for count, p in enumerate(predictions):
     print(p) # predictions for all possible nums
     number = np.argmax(p)  # predicted num (rounded to whole)
-    # rounded = str(round(p[number], 4))
-    rounded = '{0:.4f}'.format(p[number])
+    rounded = '{0:.4f}'.format(p[number]) # rounded = str(round(p[number], 4))
     x, y, w, h = chars_dimensions[count]
     cv.rectangle(image, (x, y), (x+w, y+h), (36, 255, 12), thickness=2) # rectangle around char
-    # , cv.FONT_HERSHEY_PLAIN, 2.5, (36, 255, 12), thickness=2
     cv.putText(image, f'{number} ({rounded})', (x, y-12), cv.FONT_HERSHEY_SIMPLEX, 1.0, (36, 255, 12), thickness=2) # cv.FONT_HERSHEY_SIMPLEX, 2.2, (0, 255, 0),
     # plt.imshow(chars[count]) # predicted image
 
@@ -83,11 +81,7 @@ for count, p in enumerate(predictions):
     # plt.show()
     print('\n')
 
-cv.imshow('predicted', image)
 
-
-
-
-# TODO: draw boxes around chars in orig. image and label w/ predictions
+cv.imshow('predicted', image) # with boxes around detected chars & their predictions
 
 cv.waitKey(0)
