@@ -22,7 +22,7 @@ contours = imutils.grab_contours(contours)
 contours = sort_contours(contours, 'left-to-right')[0]
 
 chars = []
-
+chars_dimensions = []
 for c in contours:
     (x, y, w, h) = cv.boundingRect(c) # bounding box around contour
     # print(w, h)
@@ -60,6 +60,7 @@ for c in contours:
 
         # update our list of characters that will be predicted
         chars.append(padded) # [padded, (x, y, w, h), None]
+        chars_dimensions.append((x, y, w, h))
 
 # PREDICTING
 chars = np.asarray(chars)
@@ -69,15 +70,24 @@ predictions = model.predict([chars])
 
 for count, p in enumerate(predictions):
     print(p) # predictions for all possible nums
-    plt.imshow(chars[count]) # predicted image
-    number = np.argmax(p) # predicted num (rounded to whole)
-    rounded = round(p[number] * 100, 2)
-    plt.title(f'Prediction: {number} (' + str(rounded) + '%)') # rounded doesn't round in the f-string for some reason
-    plt.show()
+    number = np.argmax(p)  # predicted num (rounded to whole)
+    # rounded = str(round(p[number], 4))
+    rounded = '{0:.4f}'.format(p[number])
+    x, y, w, h = chars_dimensions[count]
+    cv.rectangle(image, (x, y), (x+w, y+h), (36, 255, 12), thickness=2) # rectangle around char
+    # , cv.FONT_HERSHEY_PLAIN, 2.5, (36, 255, 12), thickness=2
+    cv.putText(image, f'{number} ({rounded})', (x, y-12), cv.FONT_HERSHEY_SIMPLEX, 1.0, (36, 255, 12), thickness=2) # cv.FONT_HERSHEY_SIMPLEX, 2.2, (0, 255, 0),
+    # plt.imshow(chars[count]) # predicted image
+
+    # plt.title(f'Prediction: {number} (' + str(rounded) + '%)') # rounded doesn't round in the f-string for some reason
+    # plt.show()
     print('\n')
 
+cv.imshow('predicted', image)
 
 
-# TODO: draw boxes around chars in orig. image and label w/ predictions, upload to GitHub
 
-# cv.waitKey(0)
+
+# TODO: draw boxes around chars in orig. image and label w/ predictions
+
+cv.waitKey(0)
