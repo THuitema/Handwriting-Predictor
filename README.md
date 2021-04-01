@@ -1,6 +1,7 @@
 # Handwriting-Predictor
 Handwriting is predicted using a convolutional neural network model.
 
+![picture of numbers with predictions](images/predictDigits1.png)
 ## Description
 This is one of my first major machine learning projects. A convolutional neural network model was developed using *Tensorflow* and *Keras* and trained with the [MNIST](https://www.tensorflow.org/datasets/catalog/mnist) dataset to detect handwritten digits. The model I developed recorded a **98.9% accuracy** when executing `model.evaluate` for the MNIST test images. 
 
