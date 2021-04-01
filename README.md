@@ -1,5 +1,5 @@
 # Handwriting-Predictor
-Handwriting is predicted using a convolutional neural network model.
+**GOAL:** predict handwriting using a convolutional neural network model.
 
 ![picture of numbers with predictions](images/predictDigits1.png)
 ## Description
