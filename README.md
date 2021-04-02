@@ -7,7 +7,7 @@
 This is one of my first major machine learning projects. A convolutional neural network model was developed using *Tensorflow* and *Keras* and trained with the [MNIST](https://www.tensorflow.org/datasets/catalog/mnist) dataset to detect handwritten digits. The model I developed recorded a **98.9% accuracy** when executing `model.evaluate` for the MNIST test images. 
 
 ### Future Goals: 
-- [x] create a GUI interface to predict mouse-drawn digits 
+- [x] create a GUI interface to predict mouse-drawn digits
 - [ ] implement recognition for letters (a-z)
 - [ ] implement recognition for symbols (e.g. +-/*$#)
 - [ ] distinguish between spaces and characters of the same word
