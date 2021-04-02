@@ -5,7 +5,7 @@ By Thomas Huitema
 ![gif of digits being predicted](images/digitPredictDemo2.gif)
 
 ## Description
-This is one of my first major machine learning projects. A convolutional neural network model was developed using *Tensorflow* and *Keras* and trained with the [MNIST](https://www.tensorflow.org/datasets/catalog/mnist) dataset to detect handwritten digits. The model developed recorded a **99.42% accuracy** when testing against the 10,000 MNIST test images.
+This is one of my first major machine learning projects. A convolutional neural network model was developed using *Tensorflow* and *Keras* and trained with the [MNIST](https://www.tensorflow.org/datasets/catalog/mnist) dataset to detect handwritten digits. The model recorded a **99.42% accuracy** when testing against the 10,000 MNIST test images.
 
 ### Future Goals: 
 - [x] create a GUI interface to predict mouse-drawn digits
@@ -23,9 +23,8 @@ This is one of my first major machine learning projects. A convolutional neural 
 
 
 ## Updates
-- **March 31:** able to detect & predict digits (0-9) from an image
-![picture of numbers with predictions](images/predictDigits1.png)
-  
 - **April 1st:** detect digits drawn by the user in a tkinter GUI
 ![picture of handwritten digits and their predictions in a tkinter GUI](images/predictWGUI.png)
 
+- **March 31:** able to detect & predict digits (0-9) from an image
+![picture of numbers with predictions](images/predictDigits1.png)
