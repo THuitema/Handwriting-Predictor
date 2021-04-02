@@ -70,7 +70,7 @@ def prep_img(image):
 # PREDICTING
 def predict(image, chars, chars_dimensions):
     chars = np.asarray(chars)
-    model = keras.models.load_model('models/acc-0.989')
+    model = keras.models.load_model('models/acc-0.9942')
     predictions = model.predict([chars])
 
     # drawing boxes around chars w/ predictions
