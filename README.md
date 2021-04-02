@@ -1,4 +1,5 @@
 # Handwriting-Predictor
+By Thomas Huitema 
 **GOAL:** predict handwriting using a convolutional neural network model.
 
 ![gif of digits being predicted](images/digitPredictDemo2.gif)
