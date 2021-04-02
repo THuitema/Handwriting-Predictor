@@ -28,6 +28,8 @@ tk.title = 'Drawing w/ Mouse'
 tk.geometry('{}x{}'.format(FRAME_WIDTH, FRAME_HEIGHT))
 tk.resizable(False, False) # prevents changing window dimensions
 
+rects_and_labels = []
+
 def paint(event):
     color = 'black'
     x1,y1=(event.x-3), (event.y-3)
@@ -36,6 +38,13 @@ def paint(event):
     cv.circle(blank, (event.x, event.y), 3, (0, 0, 0), -1) # small dot also made in cv image
 
 def predict_drawing():
+    global rects_and_labels
+
+    # clear any existing rectangles and labels drawn while keeping drawings
+    for x in rects_and_labels:
+        canvas.delete(x)
+
+    rects_and_labels = []
     chars, chars_dimensions = prep_img(blank)
     predictions = predict(blank, chars, chars_dimensions)
 
@@ -50,14 +59,18 @@ def predict_drawing():
         x2 = x + w + 4
         y1 = y - 4
         y2 = y + h + 4
-        canvas.create_rectangle(x1, y1, x2, y2, outline='#39FF14') # green
-        canvas.create_text(x-4, y-15, text=f'{prediction} ({rounded}%)', anchor=W) # prediction text
+        rect = canvas.create_rectangle(x1, y1, x2, y2, outline='#39FF14') # green
+        label = canvas.create_text(x-4, y-15, text=f'{prediction} ({rounded}%)', anchor=W) # prediction text
+        rects_and_labels.append(rect)
+        rects_and_labels.append(label)
 
     # cv.imshow('prediction', blank)
 
 def clear():
+    global rects_and_labels
     canvas.delete('all')
     blank.fill(255) # fills array with white pixels
+    rects_and_labels = []
 
 
 # main containers
