@@ -4,9 +4,7 @@ from PIL import Image, ImageTk
 import numpy as np
 import cv2 as cv
 import os
-from tensorflow import keras
-import imutils
-from imutils.contours import sort_contours
+
 from prep_and_predict import predict, prep_img
 import matplotlib
 matplotlib.use("TkAgg")
@@ -28,6 +26,8 @@ tk.title = 'Drawing w/ Mouse'
 tk.geometry('{}x{}'.format(FRAME_WIDTH, FRAME_HEIGHT))
 tk.resizable(False, False) # prevents changing window dimensions
 
+rects_and_labels = []
+
 def paint(event):
     color = 'black'
     x1,y1=(event.x-3), (event.y-3)
@@ -36,11 +36,20 @@ def paint(event):
     cv.circle(blank, (event.x, event.y), 3, (0, 0, 0), -1) # small dot also made in cv image
 
 def predict_drawing():
+    global rects_and_labels
+
+    # clear any existing rectangles and labels drawn while keeping drawings
+    for x in rects_and_labels:
+        canvas.delete(x)
+
+    rects_and_labels = []
     chars, chars_dimensions = prep_img(blank)
     predictions = predict(blank, chars, chars_dimensions)
 
+    guessed_chars = []
     for i, p in enumerate(predictions): # i is counter, p is prediction list
         prediction = np.argmax(p)
+        guessed_chars.append(str(prediction))
         rounded = round(p[prediction] * 100, 2)
         print(f'Prediction: {prediction} ({rounded}%)')
 
@@ -50,14 +59,30 @@ def predict_drawing():
         x2 = x + w + 4
         y1 = y - 4
         y2 = y + h + 4
-        canvas.create_rectangle(x1, y1, x2, y2, outline='#39FF14') # green
-        canvas.create_text(x-4, y-15, text=f'{prediction} ({rounded}%)', anchor=W) # prediction text
+        rect = canvas.create_rectangle(x1, y1, x2, y2, outline='#39FF14') # green
+        label = canvas.create_text(x-4, y-15, text=f'{prediction} ({rounded}%)', anchor=W) # prediction text
+        rects_and_labels.append(rect)
+        rects_and_labels.append(label)
 
+    # writing detected chars in guess frame
+    write_chars(guessed_chars)
     # cv.imshow('prediction', blank)
 
+def write_chars(chars):
+    # clearing anything in guess frame
+    for widget in guess_frame.winfo_children():
+        widget.destroy()
+
+    output = ""
+    guess_label = Label(guess_frame, text=f'You wrote: {output.join(chars)}')
+    guess_label.pack(anchor=NW)
+
+
 def clear():
+    global rects_and_labels
     canvas.delete('all')
     blank.fill(255) # fills array with white pixels
+    rects_and_labels = []
 
 
 # main containers
@@ -84,6 +109,7 @@ predict_btn.pack(side=LEFT, padx=170)
 # middle frame
 canvas_frame = Frame(middle_frame, bg='white', width=(FRAME_WIDTH/2), height=(FRAME_HEIGHT-60), relief='ridge', borderwidth=3) # , relief='ridge', borderwidth=3
 guess_frame = Frame(middle_frame, bg='white', width=(FRAME_WIDTH/2), height=(FRAME_HEIGHT-60), relief='ridge', borderwidth=3)
+guess_frame.pack_propagate(0)
 canvas_frame.grid(row=0, column=0)
 guess_frame.grid(row=0, column=1)
 
