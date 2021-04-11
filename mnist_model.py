@@ -1,7 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
-from keras import layers, models
-from keras.layers import Conv2D, Dense, Dropout, MaxPool2D, Flatten, BatchNormalization, Activation
+from keras import layers
 import matplotlib.pyplot as plt
 import ssl
 import os
@@ -40,27 +39,22 @@ def prep_data(x_train, x_test):
 x_train, y_train, x_test, y_test = load_data()
 x_train, x_test = prep_data(x_train, x_test)
 
-
-model = models.Sequential()
-model.add(Conv2D(28,(5,5),padding='same',input_shape=(28, 28, 1), activation='relu'))
-
-model.add(BatchNormalization())
-model.add(Conv2D(28,(5,5), activation='relu'))
-model.add(MaxPool2D(pool_size=(2,2)))
-model.add(Dropout(0.25))
-
-model.add(Conv2D(32,(5,5),padding='same',input_shape=(28, 28, 1), activation='relu'))
-model.add(BatchNormalization())
-model.add(Conv2D(32, (5,5), activation='relu'))
-model.add(MaxPool2D(pool_size=(2,2)))
-
-model.add(Dropout(0.25))
-model.add(Flatten())
-model.add(Dense(512, activation='relu'))
-
-model.add(Dropout(0.25))
-model.add(Dense(10, activation='softmax'))
-
+model = keras.Sequential([
+    layers.Conv2D(32, (3,3), activation='relu', input_shape=(28, 28, 1)),
+    layers.MaxPool2D((2,2)), # gets max pixel in every 2x2 grid
+    layers.Conv2D(64, (3,3), activation='relu'),
+    layers.MaxPool2D((2,2)), 
+    
+    layers.BatchNormalization(),
+    layers.Flatten(), # flattens 2D array to 1D
+    
+    # deepening model with more layers
+    layers.Dense(64, activation='relu'),
+    layers.Dropout(0.2),
+    layers.Dense(128, activation='relu'),
+    
+    layers.Dense(10, activation='softmax') # output layer, 10 = number of outputs
+])
 
 model.compile(
     optimizer='adam',
@@ -73,18 +67,15 @@ model.fit(x_train, y_train, batch_size=128, epochs=8)
 val_loss, val_acc = model.evaluate(x_test, y_test)
 
 # saving model if val_acc > most accurate model
-high = .9890
+high = .9890 
 if val_acc > high:
     model.save(f'models/acc-{round(val_acc, 4)}')
     print('model saved')
 
-# loading model and showing predictions from x_test
-loaded = keras.models.load_model('models/acc-0.9942')
-predictions = loaded.predict([x_test])
-
+# loading model and showing first 10 predictions from x_test in matplotlib
+loaded = keras.models.load_model('models/acc-0.989')
+predictions = loaded.predict([x_test[:10]])
 for count, i in enumerate(predictions):
-    print(i, y_test[count])
+    print(i)
     plt.imshow(x_test[count])
-    plt.title(f'Predicted: {np.argmax(i)}, Actual: {y_test[count]}')
     plt.show()
-
