@@ -70,19 +70,20 @@ def prep_img(image):
 # PREDICTING
 def predict(image, chars, chars_dimensions):
     chars = np.asarray(chars)
-    model = keras.models.load_model('models/acc-0.9942')
+    # model = keras.models.load_model('models/acc-0.9942')
+    model = keras.models.load_model('models/emnist_acc-0.8928')
     predictions = model.predict([chars])
 
     # drawing boxes around chars w/ predictions
     for count, p in enumerate(predictions):
-        print(p) # predictions for all possible nums
+        # print(p) # predictions for all possible nums
         number = np.argmax(p)  # predicted num (rounded to whole)
         rounded = '{0:.4f}'.format(p[number]) # rounded = str(round(p[number], 4))
 
         x, y, w, h = chars_dimensions[count]
         cv.rectangle(image, (x, y), (x+w, y+h), (36, 255, 12), thickness=2) # rectangle around char
         cv.putText(image, f'{number} ({rounded})', (x, y-12), cv.FONT_HERSHEY_SIMPLEX, 1.0, (36, 255, 12), thickness=2)
-        print('\n')
+        # print('\n')
 
     return predictions
 

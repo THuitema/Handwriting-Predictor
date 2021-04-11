@@ -4,10 +4,8 @@ from PIL import Image, ImageTk
 import numpy as np
 import cv2 as cv
 import os
-
 from prep_and_predict import predict, prep_img
 import matplotlib
-matplotlib.use("TkAgg")
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # hides tensorflow warnings
 
@@ -17,6 +15,8 @@ Backend: where the user draws on the canvas is also drawn on a cv2 image (both s
          clicks the predict button, that numpy array is prepped and fed into the neural net model. The predictions are displayed 
          on the tkinter canvas which the user can see
 '''
+
+CLASSES = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabdefghnqrt' # 47 classes
 
 FRAME_WIDTH = 800
 FRAME_HEIGHT = 400
@@ -48,9 +48,10 @@ def predict_drawing():
 
     guessed_chars = []
     for i, p in enumerate(predictions): # i is counter, p is prediction list
-        prediction = np.argmax(p)
+        p_index = np.argmax(p)
+        prediction = CLASSES[int(p_index)] # 0, 1, 2... x, y, z
         guessed_chars.append(str(prediction))
-        rounded = round(p[prediction] * 100, 2)
+        rounded = round(p[p_index] * 100, 2)
         print(f'Prediction: {prediction} ({rounded}%)')
 
         # drawing rectangles around each char and displaying their prediction
