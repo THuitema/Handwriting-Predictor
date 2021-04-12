@@ -10,7 +10,7 @@ This is one of my first major machine learning projects. A convolutional neural 
 ### Future Goals: 
 - [x] create a GUI interface to predict mouse-drawn digits
 - [ ] detect characters left-to-right AND top-to-bottom instead of just left-to-right
-- [ ] implement recognition for letters (a-z)
+- [x] implement recognition for letters (a-z)
 - [ ] implement recognition for symbols (e.g. +-/*$#)
 - [ ] distinguish between spaces and characters of the same word
 
